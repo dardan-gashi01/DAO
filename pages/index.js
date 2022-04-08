@@ -59,7 +59,7 @@ useEffect(() => {
 
   };
   getAllAddresses();
-}, [hasClaimedNFT, editionDrop]);
+}, [hasClaimedNFT, editionDrop.history]);
 
 // This useEffect grabs the # of token each member holds.
 useEffect(() => {
@@ -77,7 +77,7 @@ useEffect(() => {
     }
   };
   getAllBalances();
-}, [hasClaimedNFT, token]);
+}, [hasClaimedNFT, token.history]);
 
 // Now, we combine the memberAddresses and memberTokenAmounts into a single array
 const memberList = useMemo(() => {
