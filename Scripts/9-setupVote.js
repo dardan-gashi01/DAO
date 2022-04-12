@@ -1,9 +1,9 @@
 import sdk from './1-SDK.js';
 
-const vote = sdk.getVote("0x54000321f966e0469367415436594De58e3BC304");
+const vote = sdk.getVote("0xa92922B800a7734824d8B3036FDdE0eA59d5e337");
 
 // This is our ERC-20 contract.
-const token = sdk.getToken("0x5C69a8e7B51f035c9b09D8729A3C74795A517F03");
+const token = sdk.getToken("0x6f9177d6937e619ECB05E5199b09F7840De19765");
 
 (async () => {
   try {
@@ -27,17 +27,17 @@ const token = sdk.getToken("0x5C69a8e7B51f035c9b09D8729A3C74795A517F03");
       process.env.WALLET_ADDRESS
     );
 
-    // Grab 90% of the supply that we hold.
+    // Grab 50% of the supply that we hold.
     const ownedAmount = ownedTokenBalance.displayValue;
-    const percent90 = Number(ownedAmount) / 100 * 90;
+    const percent50 = Number(ownedAmount) / 100 * 50;
 
     // Transfer 90% of the supply to our voting contract.
     await token.transfer(
       vote.getAddress(),
-      percent90
+      percent50
     ); 
 
-    console.log("✅ Successfully transferred " + percent90 + " tokens to vote contract");
+    console.log("✅ Successfully transferred " + percent50 + " tokens to vote contract");
   } catch (err) {
     console.error("failed to transfer tokens to vote contract", err);
   }

@@ -7,7 +7,7 @@ import {readFile, readFileSync} from 'fs';
             name: 'CITY DAO PASS',
             description: 'The pass to join the CITY DAO',
             image: readFileSync('./assets/lizard.png'),
-            primary_sale_recipient: "0x001aa75Cf65D7CdF916dc2B69B0b47e45ad63a22",
+            primary_sale_recipient: "0x964fC93ba3C3b4809f154a419274a7F3d1A3F38A",
         });
 
 
@@ -15,8 +15,8 @@ import {readFile, readFileSync} from 'fs';
 
         await NFTDrop.royalty.setDefaultRoyaltyInfo({
             seller_fee_basis_points: 500, // 5%
-            fee_recipient: "0x54000321f966e0469367415436594De58e3BC304"
-        })
+            fee_recipient: "0x964fC93ba3C3b4809f154a419274a7F3d1A3F38A"
+        });
 
         const royaltyInfo = await NFTDrop.royalty.getDefaultRoyaltyInfo()
         

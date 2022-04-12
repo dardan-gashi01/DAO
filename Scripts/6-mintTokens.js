@@ -1,6 +1,6 @@
 import sdk from './1-SDK.js';
 
-const token = sdk.getToken("0x5C69a8e7B51f035c9b09D8729A3C74795A517F03");
+const token = sdk.getToken("0x6f9177d6937e619ECB05E5199b09F7840De19765");
 
 (async () => {
     try{

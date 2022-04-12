@@ -5,40 +5,40 @@ import { useAddress,useEditionDrop, useToken } from '@thirdweb-dev/react'
 import {useState, useEffect, useMemo} from 'react'
 import Image from 'next/image'
 import Lizard from '../assets/lizard.png' 
+import axios from 'axios'
+import Coin from './Coin'
+
 
 
 
 const styles = {
   wrapper:'w-screen h-screen flex flex-col',
   mainContainer:'',
-  title:'text-white',
-  image:'text-white',
-  button:'text-white',
-  claimed:'text-white',
+  title:'',
+  image:'',
+  button:'',
+  claimed:'',
+  marketData:'',
 }
 
 
 export default function Home() {
 
-  const editionDrop = useEditionDrop('0x6b94A4e94Aed2D72dC12AF523BbE0d168f439Ba7');
-  console.log("editionDrop",editionDrop);
+  const editionDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
 
-  const token = useToken('0x5C69a8e7B51f035c9b09D8729A3C74795A517F03');
+  const token = useToken('0x6f9177d6937e619ECB05E5199b09F7840De19765');
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   
   const [isClaiming,setIsClaiming] = useState(false);
   const address = useAddress();
   const [ClaimedNFT, setClaimedNFT] = useState(false);
+  const [coins, setCoins] = useState([])
+  const [search, setSearch] = useState('')
 
   // Holds the amount of token each member has in state.
 const [memberTokenAmounts, setMemberTokenAmounts] = useState([]);
 // The array holding all of our members addresses.
 const [memberAddresses, setMemberAddresses] = useState([]);
-
-// A fancy function to shorten someones wallet address, no need to show the whole thing. 
-const shortenAddress = (str) => {
-  return str.substring(0, 6) + "..." + str.substring(str.length - 4);
-};
 
 // This useEffect grabs all the addresses of our members holding our NFT.
 useEffect(() => {
@@ -52,14 +52,14 @@ useEffect(() => {
     try {
       const memberAddresses = await editionDrop.history.getAllClaimerAddresses(0);
       setMemberAddresses(memberAddresses);
-      console.log("🚀 Members addresses", memberAddresses);
+      console.log("Members addresses", memberAddresses);
     } catch (error) {
       console.error("failed to get member list", error);
     }
 
   };
   getAllAddresses();
-}, [hasClaimedNFT, editionDrop.history]);
+}, [hasClaimedNFT, editionDrop?.history]);
 
 // This useEffect grabs the # of token each member holds.
 useEffect(() => {
@@ -71,13 +71,22 @@ useEffect(() => {
     try {
       const amounts = await token.history.getAllHolderBalances();
       setMemberTokenAmounts(amounts);
-      console.log("👜 Amounts", amounts);
+      console.log("Amounts", amounts);
     } catch (error) {
       console.error("failed to get member balances", error);
     }
   };
   getAllBalances();
-}, [hasClaimedNFT, token.history]);
+}, [hasClaimedNFT, token?.history]);
+
+useEffect(() => {
+  axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false")
+  .then(res => {
+    setCoins(res.data);
+  }).catch(err => console.error(err))
+}, []);
+
+const filteredCoins = coins.filter(coin => coin.name.toLowerCase().includes(search.toLowerCase()))
 
 // Now, we combine the memberAddresses and memberTokenAmounts into a single array
 const memberList = useMemo(() => {
@@ -103,9 +112,9 @@ const memberList = useMemo(() => {
       try{
         const balance = await editionDrop.balanceOf(address, 0);
         if(balance.gt(0)){
-          setClaimedNFT(true);
+          setHasClaimedNFT(true);
         }else {
-          setClaimedNFT(false);
+          setHasClaimedNFT(false);
         }
       }catch(err){
         console.error(err);
@@ -135,7 +144,7 @@ const memberList = useMemo(() => {
   return (
     
     <div className={styles.wrapper}>
-    {ClaimedNFT && address ? (
+    {hasClaimedNFT && address ? (
 
       <div className={styles.claimed}>
         <Header />
@@ -162,6 +171,13 @@ const memberList = useMemo(() => {
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className={styles.marketData}>
+                {filteredCoins.map(coin => {
+                  return (
+                    <Coin key={coin.id} name={coin.name} image={coin.image} symbol={coin.symbol} volume={coin.market_cap} price={coin.current_price} priceChange={coin.price_change_percentage_24h}/>
+                  )
+                })}  
           </div>
         </div>
       </div>

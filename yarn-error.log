@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js add @3rdweb/hooks
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js add axios
 
 PATH: 
   /Users/dardangashi/.cabal/bin:/Users/dardangashi/.ghcup/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dardangashi/javacc-7_0_4/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/dardangashi/.cabal/bin:/Users/dardangashi/.ghcup/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Users/dardangashi/opt/anaconda3/bin:/Users/dardangashi/opt/anaconda3/condabin:Users/dardangashi/Desktop/javacc-7_0_4/bin:Users/dardangashi/Desktop/javacc-7_0_4/bin
@@ -39,7 +39,7 @@ npm manifest:
     },
     "dependencies": {
       "@thirdweb-dev/react": "^2.0.4",
-      "@thirdweb-dev/sdk": "^2.0.25",
+      "@thirdweb-dev/sdk": "^2.0.26",
       "dotenv": "^16.0.0",
       "next": "12.1.4",
       "node-ethers": "^3.0.4",
@@ -1261,10 +1261,10 @@ Lockfile:
       "tiny-invariant" "^1.2.0"
       "wagmi" "0.2.24"
   
-  "@thirdweb-dev/sdk@^2.0.15", "@thirdweb-dev/sdk@^2.0.25":
-    "integrity" "sha512-HTRHWv2VsStUc6bo5pE+xPotBS0U7r0ZDLeiODT/1w0rc+6qIryhxdry76iUMNrrUjRch5LN/y5q0RQv3l0mGQ=="
-    "resolved" "https://registry.npmjs.org/@thirdweb-dev/sdk/-/sdk-2.0.25.tgz"
-    "version" "2.0.25"
+  "@thirdweb-dev/sdk@^2.0.15", "@thirdweb-dev/sdk@^2.0.26":
+    "integrity" "sha512-x5cibp+VP16Pqw9YfH0maPU3kUE3IApX88M+UA7lUKj4frZSiiMMOAWhRn98m/NkPJYi7bqVcfJuvlG8TArvpw=="
+    "resolved" "https://registry.npmjs.org/@thirdweb-dev/sdk/-/sdk-2.0.26.tgz"
+    "version" "2.0.26"
     dependencies:
       "@ethersproject/bignumber" "^5.6.0"
       "@ethersproject/bytes" "^5.6.1"

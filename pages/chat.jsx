@@ -21,7 +21,7 @@ const style = {
 
 const chat = () => {
     const [ClaimedNFT, setClaimedNFT] = useState(false);
-    const NFTDrop = useEditionDrop('0x6b94A4e94Aed2D72dC12AF523BbE0d168f439Ba7');
+    const NFTDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
     const contractAddress = "0x22966a22C5Bb1362e40a100176e40D3650cb0C2c";
     const contractABI = abi.abi;
     const address = useAddress();

@@ -16,14 +16,15 @@ const styles = {
 
 const proposals = () => {
 
-  const NFTDrop = useEditionDrop('0x6b94A4e94Aed2D72dC12AF523BbE0d168f439Ba7');
-  const token = useToken('0x5C69a8e7B51f035c9b09D8729A3C74795A517F03');
-  const vote = useVote('0x54000321f966e0469367415436594De58e3BC304');
+  const NFTDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
+  const token = useToken('0x6f9177d6937e619ECB05E5199b09F7840De19765');
+  const vote = useVote('0xa92922B800a7734824d8B3036FDdE0eA59d5e337');
   const [ClaimedNFT, setClaimedNFT] = useState(false);
   const [proposals, setProposals] = useState([]);
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const address = useAddress();
+  const propStates = ["Pending", "Active", "Cancelled", "Defeated", "Succeeded", "Queued", "Expired", "Executed"];
 
 
   useEffect(() => {
@@ -95,7 +96,15 @@ const proposals = () => {
     checkVotes();
   },[vote]);
   
-  
+  useEffect(() => {
+    const checkStatus = async () => {
+      try{
+
+      }catch(err){
+        console.log(err);
+      }
+    }
+  })
 
 
 
@@ -195,6 +204,7 @@ const proposals = () => {
               {proposals.map((proposal) => (
                 <div key={proposal.proposalId} className="card">
                   <h5>{proposal.description}</h5>
+                  <div><p>Proposal Status: <strong>{propStates[proposal.state]}</strong></p></div>
                   <div>
                     {proposal.votes.map(({ type, label }) => (
                       <div key={type}>

@@ -1,7 +1,7 @@
 import sdk from './1-SDK.js';
 import {MaxUint256} from "@ethersproject/constants";
 
-const NFTDrop = sdk.getEditionDrop("0x6b94A4e94Aed2D72dC12AF523BbE0d168f439Ba7");
+const NFTDrop = sdk.getEditionDrop("0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B");
 
 (async () => {
     try{
@@ -10,7 +10,7 @@ const NFTDrop = sdk.getEditionDrop("0x6b94A4e94Aed2D72dC12AF523BbE0d168f439Ba7")
 
             max_Quantity: 10,
 
-            price: 0.2,
+            price: 0.1,
 
             quantityLimitPerTransaction: 1,
 
