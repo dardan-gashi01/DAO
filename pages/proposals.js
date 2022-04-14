@@ -46,6 +46,8 @@ const proposals = () => {
     checkBalance();
   },[address,NFTDrop]);
 
+  
+
 
   useEffect(() => {
     if (!ClaimedNFT) {
@@ -55,6 +57,7 @@ const proposals = () => {
     const getProposals = async () => {
       try{
         const proposals = await vote.getAll();
+        console.log(proposals);
         setProposals(proposals);
       }catch(err){
         console.error('cant get proposals', err);
@@ -74,7 +77,7 @@ const proposals = () => {
 
     const checkIfUserVoted = async () => {
       try{
-        const hasVoted = await vote.hasVoted(proposals[0].proposalId, address);
+        const hasVoted = await vote.hasVoted(proposals[proposals.length -1 ].proposalId, address);
         setHasVoted(hasVoted);
       }catch(err){
         console.error(err);

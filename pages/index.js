@@ -7,18 +7,26 @@ import Image from 'next/image'
 import Lizard from '../assets/lizard.png' 
 import axios from 'axios'
 import Coin from './Coin'
+import NFT from '../assets/NFT.png'
+import forum from '../assets/forum.png'
+import vote from '../assets/vote.png'
 
 
 
 
 const styles = {
   wrapper:'w-screen h-screen flex flex-col',
-  mainContainer:'',
-  title:'',
-  image:'',
-  button:'',
+  mainContainer:'text-white',
+  title:'text-4xl font-bold mb-2 text-white mb-20',
+  image:'my-5',
+  button:'bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-1 rounded-full w-64 ',
   claimed:'',
   marketData:'',
+  about:'mb-20 text-2xl font-bold text-white',
+  des1:'mr-96',
+  des2:'ml-96',
+  des3:'mr-96',
+  box:'rounded-md border-2 max-w-2xl my-2 bg-[#28282B] mb-20'
 }
 
 
@@ -187,14 +195,42 @@ const memberList = useMemo(() => {
       <div className={styles.mainContainer}>
         <div className={styles.title}>
             {/*this is where we add our title*/}
-            Welcome to the DAO to get started and join the DAO mint the NFT below
+            <h1>Welcome to CITY DAO</h1>
+        </div>
+        <div className={styles.about}>What does being part of the CITY DAO give you?</div>
+
+        <div className={styles.des1}>
+          <Image src={NFT} height={150} width={200}/>
+          <div className={styles.box}>
+            <div className={styles.info}>
+              Access to a special membership NFT to allow you to use the website and interact with the other pages along with this you will also be getting an airdrop of CITY COIN every day to help you to vote or to convert for Ethereum
+            </div>
+          </div>
+        </div>
+        
+        <div className={styles.des2}>
+          <Image src={forum} height={150} width={200}/>
+          <div className={styles.box}>
+            <div className={styles.info}>
+              Access to to a special community forum for holders only where all messages are on the blockchain and you can have amazing community conversations all decentralised and with the other fellow people that are like you
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.des3}>
+          <Image src={vote} height={150} width={200}/>
+          <div className={styles.box}>
+            <div className={styles.info}>
+              Access to voting on proposals as a group of people, only open to holders of the membership NFT and to make votes to benefit the community all doen fairly where the weight of your vote is determined to how long you hold the NFT so loyal members are rewarded
+            </div>
+          </div>
         </div>
         <div className={styles.image}>
             <Image src={Lizard} height={300} width={300}/>
         </div>
         <div className={styles.button}>
             <button disabled={isClaiming} onClick={mint}>
-              {isClaiming ? 'minting...' : "mint NFT (0.2ETH)"}
+              {isClaiming ? 'minting...' : "mint NFT (0.1ETH)"}
             </button>
         </div>
       </div>
