@@ -1,6 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
 require("dotenv/config");
-
+//setting our network so that we can deploy to the blockchain
 module.exports = {
   solidity: "0.8.0",
   networks: {

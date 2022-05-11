@@ -1,4 +1,6 @@
-//components
+//Home page so the user can either mint if not member. or can see some statistics if they are
+
+//importing the things we need
 import Header from '../components/Header'
 import {useRouter} from 'next/router'
 import { useAddress,useEditionDrop, useToken } from '@thirdweb-dev/react'
@@ -13,25 +15,27 @@ import vote from '../assets/vote.png'
 
 
 
-
+//styling of the page using tailwind CSS
 const styles = {
-  wrapper:'w-screen h-screen flex flex-col',
+  wrapper:'w-screen h-screen flex flex-col text-white',
   mainContainer:'text-white',
   title:'text-4xl font-bold mb-2 text-white mb-20',
   image:'my-5',
   button:'bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-1 rounded-full w-64 ',
-  claimed:'',
-  marketData:'',
+  claimed:'text-white',
+  marketData:'text-white my-5',
   about:'mb-20 text-2xl font-bold text-white',
   des1:'mr-96',
   des2:'ml-96',
   des3:'mr-96',
-  box:'rounded-md border-2 max-w-2xl my-2 bg-[#28282B] mb-20'
+  box:'rounded-md border-2 max-w-2xl my-2 bg-[#28282B] mb-20',
+  table:'table-auto border my-5',
+  lizard:'my-5',
 }
 
 
 export default function Home() {
-
+  //setting our variables and states to use
   const editionDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
 
   const token = useToken('0x6f9177d6937e619ECB05E5199b09F7840De19765');
@@ -43,7 +47,7 @@ export default function Home() {
   const [coins, setCoins] = useState([])
   const [search, setSearch] = useState('')
 
-  // Holds the amount of token each member has in state.
+// Holds the amount of token each member has in state.
 const [memberTokenAmounts, setMemberTokenAmounts] = useState([]);
 // The array holding all of our members addresses.
 const [memberAddresses, setMemberAddresses] = useState([]);
@@ -77,6 +81,7 @@ useEffect(() => {
 
   const getAllBalances = async () => {
     try {
+      //grad tokens using the getAllHolderBalances
       const amounts = await token.history.getAllHolderBalances();
       setMemberTokenAmounts(amounts);
       console.log("Amounts", amounts);
@@ -87,6 +92,7 @@ useEffect(() => {
   getAllBalances();
 }, [hasClaimedNFT, token?.history]);
 
+//get the API from coingeko to display price data
 useEffect(() => {
   axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false")
   .then(res => {
@@ -148,31 +154,34 @@ const memberList = useMemo(() => {
 
 
 
-                
+//our webpage HTML and CSS          
   return (
-    
+    //this is for the page that the user owns the NFT
     <div className={styles.wrapper}>
+    {/*error handling to make sure that the user can  only access this page if they own the nft*/}
     {hasClaimedNFT && address ? (
 
       <div className={styles.claimed}>
         <Header />
         <div className={styles.page}>
-          <div>
+          <center>
+          <div className={styles.holders}>
             <div>
-              <h2>member List</h2>
-              <table className={styles.card}>
+              {/* display the token holders along with the number of coins they hold*/}
+              <h2 class='text-4xl font-bold mb-2 text-white'>Top CITY Coin holders</h2>
+              <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Address</th>
-                    <th>Token Amount</th>
+                    <th class='border border-slate-600'>Address</th>
+                    <th class='border border-slate-600'>Token Amount</th>
                   </tr>
                 </thead>
                 <tbody>
                   {memberList.map((member) => {
                     return (
                       <tr key={member.address}>
-                        <td>{member.address.substring(0,8)}...</td>
-                        <td>{member.tokenAmount}</td>
+                        <td class='border border-slate-600'>{member.address.substring(0,8)}...</td>
+                        <td class='border border-slate-600'>{member.tokenAmount}</td>
                       </tr>
                     );
                   })}
@@ -180,7 +189,21 @@ const memberList = useMemo(() => {
               </table>
             </div>
           </div>
+          </center>
+          {/* call the Coin compoment to display all of the crypto prices*/}
           <div className={styles.marketData}>
+            <center><h2 class='text-4xl font-bold mb-2 text-white'>Market Data for Today</h2></center>
+            <center>
+            <div class='grid grid-cols-6 border max-w-4xl'>
+              <div>Logo</div>
+              <div>Name</div>
+              <div>Symbol</div>
+              <div>Price(USD)</div>
+              <div>Market Cap</div>
+              <div>24H</div>
+            </div>
+            </center>
+            {/*calling the Coin we imported from Coin.js and inserted the parameters from the API*/}
                 {filteredCoins.map(coin => {
                   return (
                     <Coin key={coin.id} name={coin.name} image={coin.image} symbol={coin.symbol} volume={coin.market_cap} price={coin.current_price} priceChange={coin.price_change_percentage_24h}/>
@@ -190,6 +213,7 @@ const memberList = useMemo(() => {
         </div>
       </div>
     ):(
+      /* if the user doesnt own the NFT we display this page to mint it*/
       <center>
       <Header />
       <div className={styles.mainContainer}>
@@ -197,6 +221,7 @@ const memberList = useMemo(() => {
             {/*this is where we add our title*/}
             <h1>Welcome to CITY DAO</h1>
         </div>
+        {/* displaying the benefits of holding so just some information*/}
         <div className={styles.about}>What does being part of the CITY DAO give you?</div>
 
         <div className={styles.des1}>
@@ -225,12 +250,14 @@ const memberList = useMemo(() => {
             </div>
           </div>
         </div>
-        <div className={styles.image}>
+        <div className={styles.lizard}>
             <Image src={Lizard} height={300} width={300}/>
         </div>
+        {/* Then the minting the NFT button which called the mint function when clicked and claims the NFT using 
+        metamask*/}
         <div className={styles.button}>
             <button disabled={isClaiming} onClick={mint}>
-              {isClaiming ? 'minting...' : "mint NFT (0.1ETH)"}
+              {isClaiming ? 'minting NFT...' : "mint NFT Cost:0.1ETH"}
             </button>
         </div>
       </div>

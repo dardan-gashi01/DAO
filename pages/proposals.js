@@ -1,3 +1,5 @@
+//proposals page 
+//all the imports needed
 import React from 'react'
 import {useRouter} from 'next/router'
 import Header from '../components/Header.js'
@@ -6,16 +8,18 @@ import {useState, useEffect} from 'react'
 import {AddressZero} from '@ethersproject/constants';
 
 
-
+//all the stylings in tailwind CSS
 const styles = {
     wrapper:'text-white',
     container:'text-white',
+    proposal:'my-10',
+    button:'bg-blue-500 hover:bg-blue-700 text-white font-bold py-1.5 px-1 rounded-full w-32',
 }
 
 
 
 const proposals = () => {
-
+  //storing all the vairables and states we will be needing to create the page
   const NFTDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
   const token = useToken('0x6f9177d6937e619ECB05E5199b09F7840De19765');
   const vote = useVote('0xa92922B800a7734824d8B3036FDdE0eA59d5e337');
@@ -26,7 +30,8 @@ const proposals = () => {
   const address = useAddress();
   const propStates = ["Pending", "Active", "Cancelled", "Defeated", "Succeeded", "Queued", "Expired", "Executed"];
 
-
+  //this function checks the owenership of the nft so it sets it to either claimed or not claimed depending 
+    //on whats inside the wallet
   useEffect(() => {
     if (!address) { 
       return;
@@ -48,7 +53,7 @@ const proposals = () => {
 
   
 
-
+  //this script gets all proposals and stores them in the setProposals state list
   useEffect(() => {
     if (!ClaimedNFT) {
       return;
@@ -56,16 +61,19 @@ const proposals = () => {
 
     const getProposals = async () => {
       try{
+        //we use the getAll function to get all the proposals
         const proposals = await vote.getAll();
-        console.log(proposals);
+        //console.log(proposals);
         setProposals(proposals);
       }catch(err){
         console.error('cant get proposals', err);
       }
     };
+    //calling the function to get them all
     getProposals();
   }, [ClaimedNFT, vote]);
 
+  //checking if the user has voted on the proposals
   useEffect(() => {
     if(!ClaimedNFT){
       return;
@@ -74,10 +82,13 @@ const proposals = () => {
     if(!proposals.length){
       return;
     }
-
+    
     const checkIfUserVoted = async () => {
       try{
+        //so we are checking if the user has voted on the most previous proposal and passing 
+        //the most recent index along with the address of the user to check this
         const hasVoted = await vote.hasVoted(proposals[proposals.length -1 ].proposalId, address);
+        //then setting the answer as the setHasVoted state
         setHasVoted(hasVoted);
       }catch(err){
         console.error(err);
@@ -86,7 +97,7 @@ const proposals = () => {
     checkIfUserVoted();
   }, [ClaimedNFT, proposals, address, vote]);
 
-  
+  //this gets the total votes on the proposals
   useEffect(() => {
     const checkVotes = async () => {
       try{
@@ -98,28 +109,19 @@ const proposals = () => {
     };
     checkVotes();
   },[vote]);
-  
-  useEffect(() => {
-    const checkStatus = async () => {
-      try{
-
-      }catch(err){
-        console.log(err);
-      }
-    }
-  })
-
-
-
 
   return (
     <div className={styles.wrapper}>
+      {/* case handling to see if the user owns the NFT if so it shows them something different compared to the non members*/}
       {ClaimedNFT && address ? (
         <div className={styles.claimed}>
           <Header />
+          <center>
           <div className={styles.container}>
-            <h2> Active proposals</h2>
-            <form 
+            <h2 class='text-4xl font-bold mb-2 text-white my-2'> Proposals</h2>
+            
+            {/* this is the form that the user will vote with https://docs.thirdweb.com/typescript/sdk.vote*/}
+            <form class=''
               onSubmit={async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -135,12 +137,12 @@ const proposals = () => {
                     vote: 2,
                   };
                   proposal.votes.forEach((vote) => {
-                    const elem = document.getElementById(
+                    const elemement = document.getElementById(
                       proposal.proposalId + "-" + vote.type
                       
                     );
 
-                    if (elem.checked) {
+                    if (elemement.checked) {
                       voteResult.vote = vote.type;
                       return;
                     }
@@ -151,9 +153,9 @@ const proposals = () => {
                 // first we need to make sure the user delegates their token to vote
                 try {
                   //we'll check if the wallet still needs to delegate their tokens before they can vote
-                  const delegation = await token.getDelegationOf(address);
+                  const delegateTokens = await token.getDelegationOf(address);
                   // if the delegation is the 0x0 address that means they have not delegated their governance tokens yet
-                  if (delegation === AddressZero) {
+                  if (delegateTokens === AddressZero) {
                     //if they haven't delegated their tokens yet, we'll have them delegate them before voting
                     await token.delegateTo(address);
                   }
@@ -204,11 +206,15 @@ const proposals = () => {
                 }
               }}
             >
+              {/* showing the proposals on the page with HTML and CSS*/}
               {proposals.map((proposal) => (
-                <div key={proposal.proposalId} className="card">
+                <div key={proposal.proposalId} class='bg-[#107896] p-4 rounded-lg text-white my-2 max-w-2xl'>
+                  {/* showing the description of the proposals*/}
                   <h5>{proposal.description}</h5>
+                  {/* showing the status of the proposal*/}
                   <div><p>Proposal Status: <strong>{propStates[proposal.state]}</strong></p></div>
                   <div>
+                    {/* laying out the voting buttons that we can click to vote on for, against or abstain*/}
                     {proposal.votes.map(({ type, label }) => (
                       <div key={type}>
                         <input
@@ -227,23 +233,17 @@ const proposals = () => {
                   </div>
                 </div>
               ))}
-              <button disabled={isVoting || hasVoted} type="submit">
-                {isVoting
-                  ? "Voting..."
-                  : hasVoted
-                    ? "You Already Voted"
-                    : "Submit Votes"}
+              {/* creating the button to submit the votes and it wont let us vote again if we have already*/}
+              <button className={styles.button} disabled={isVoting || hasVoted} type="submit">
+                {isVoting ? "Voting on the proposal" : hasVoted ? "Voted" : "Submit Votes"}
               </button>
-              {!hasVoted && (
-                <small>
-                  This will trigger multiple transactions that you will need to
-                  sign.
-                </small>
-              )}
             </form>
+            
           </div>
+          </center>
         </div>
       ): (
+        /* this is for non members*/
         <div className={styles.notClaimed}>
           <Header />
           you dont own the NFT to access this page

@@ -14,9 +14,7 @@ const NFTDrop = sdk.getEditionDrop("0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B")
         const conditions = [{
             //start time as right now. we wouldnt do this in real life becuase you would prepare for a specific time
             startTime: new Date(),
-
             max_Quantity: 10,
-
             price: 0.1,
             //this is so we make sure that one user cannot just buy all 10 of our supply and we are a fair
             //governance
@@ -26,7 +24,6 @@ const NFTDrop = sdk.getEditionDrop("0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B")
             //https://forum.openzeppelin.com/t/using-the-maximum-integer-in-solidity/3000
             waitInSeconds: MaxUint256,
         }]
-
         //here we are setting the condition. we are doing something pretty interesting here.
         //so for erc1155 users can have multiple nfts that are the same id and this is the best for a DAO
         //because the point is to have the same pass. another thing this solves is that the gas paid is much lower

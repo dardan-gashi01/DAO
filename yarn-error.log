@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js add axios
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js run dev
 
 PATH: 
   /Users/dardangashi/.cabal/bin:/Users/dardangashi/.ghcup/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dardangashi/javacc-7_0_4/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/dardangashi/.cabal/bin:/Users/dardangashi/.ghcup/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Users/dardangashi/opt/anaconda3/bin:/Users/dardangashi/opt/anaconda3/condabin:Users/dardangashi/Desktop/javacc-7_0_4/bin:Users/dardangashi/Desktop/javacc-7_0_4/bin
@@ -14,23 +14,19 @@ Platform:
   darwin x64
 
 Trace: 
-  Invariant Violation: Commit hash required
-      at invariant (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:2314:15)
-      at GitFetcher.<anonymous> (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:93387:7)
+  SyntaxError: /Users/dardangashi/Desktop/final-dao/package.json: Unexpected token / in JSON at position 68
+      at JSON.parse (<anonymous>)
+      at /usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:1625:59
       at Generator.next (<anonymous>)
       at step (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:310:30)
-      at /usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:328:14
-      at new Promise (<anonymous>)
-      at new F (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:5301:28)
-      at GitFetcher.<anonymous> (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:307:12)
-      at GitFetcher.fetchFromExternal (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:93405:20)
-      at /usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:93555:21
+      at /usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:321:13
 
 npm manifest: 
   {
     "name": "final-dao",
     "version": "0.1.0",
     "private": true,
+    //"type" : "module",
     "scripts": {
       "dev": "next dev",
       "build": "next build",
