@@ -42,3 +42,4 @@ import {readFile, readFileSync} from 'fs';
         console.error(err);
     }
 })();
+

@@ -92,6 +92,8 @@ useEffect(() => {
   getAllBalances();
 }, [hasClaimedNFT, token?.history]);
 
+
+
 //get the API from coingeko to display price data
 useEffect(() => {
   axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false")
@@ -116,7 +118,7 @@ const memberList = useMemo(() => {
     }
   });
 }, [memberAddresses, memberTokenAmounts]);
-  
+
   //checking to see if the user owns at least one of the specials NFTS.
   useEffect(() => {
     if (!address) { 
@@ -151,8 +153,6 @@ const memberList = useMemo(() => {
       setIsClaiming(false);
     }
   };
-
-
 
 //our webpage HTML and CSS          
   return (

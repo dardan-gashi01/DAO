@@ -74,3 +74,4 @@ const Header = () => {
 }
 //exporting the header to use it as a component for our page
 export default Header
+

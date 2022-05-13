@@ -51,7 +51,7 @@ const proposals = () => {
     checkBalance();
   },[address,NFTDrop]);
 
-  
+
 
   //this script gets all proposals and stores them in the setProposals state list
   useEffect(() => {
@@ -82,6 +82,7 @@ const proposals = () => {
     if(!proposals.length){
       return;
     }
+  
     
     const checkIfUserVoted = async () => {
       try{
@@ -128,7 +129,7 @@ const proposals = () => {
 
                 //before we do async things, we want to disable the button to prevent double clicks
                 setIsVoting(true);
-
+                
                 // lets get the votes from the form for the values
                 const votes = proposals.map((proposal) => {
                   const voteResult = {
@@ -141,6 +142,7 @@ const proposals = () => {
                       proposal.proposalId + "-" + vote.type
                       
                     );
+                    
 
                     if (elemement.checked) {
                       voteResult.vote = vote.type;
@@ -254,3 +256,4 @@ const proposals = () => {
 }
 
 export default proposals
+
