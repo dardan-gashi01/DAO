@@ -1,4 +1,3 @@
-
 //script to test our contract on the localhost
 const main = async () => {
     //deploying the contract here
@@ -24,7 +23,6 @@ const main = async () => {
     //retieving all of our messages from our contract
     let allMessages = await messageContract.getAllMessages();
     console.log(allMessages);
-
 }; 
 
 //running the scripts

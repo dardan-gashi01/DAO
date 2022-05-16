@@ -17,4 +17,3 @@ import sdk from './1-SDK.js';
     }
 })();
 
-//as you can see that was so much easier than the conract/Token.sol contract we made

@@ -30,7 +30,7 @@ const chat = () => {
     const [ClaimedNFT, setClaimedNFT] = useState(false);
     const NFTDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
     const contractAddress = "0x22966a22C5Bb1362e40a100176e40D3650cb0C2c";
-    const editionDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
+    //const editionDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
     const contractABI = abi.abi;
     const address = useAddress();
 
@@ -38,7 +38,7 @@ const chat = () => {
 
     const [allMessages, setAllMessages] = useState([]);
     const [memberAddresses, setMemberAddresses] = useState([]);
-
+    
 
     //this function checks the owenership of the nft so it sets it to either claimed or not claimed depending 
     //on whats inside the wallet
@@ -46,10 +46,10 @@ const chat = () => {
       if (!address) { 
         return;
       }
-      const checkBalance = async () => {
+      const ifMember = async () => {
         try{
-          const balance = await NFTDrop.balanceOf(address, 0);
-          if(balance.gt(0)){
+          let owned = await NFTDrop.balanceOf(address, 0);
+          if(owned.gt(0)){
             setClaimedNFT(true);
           }else {
             setClaimedNFT(false);
@@ -58,7 +58,7 @@ const chat = () => {
           console.error(err);
         }
       };
-      checkBalance();
+      ifMember();
     },[address,NFTDrop]);
   
 
@@ -131,7 +131,7 @@ useEffect(() => {
   const getAllAddresses = async () => {
     try {
       //getting all the claimers of the NFT with id 0 because all of them are ID 0 because it is an erc1155 token
-      const memberAddresses = await editionDrop.history.getAllClaimerAddresses(0);
+      const memberAddresses = await NFTDrop.history.getAllClaimerAddresses(0);
       setMemberAddresses(memberAddresses);
       console.log("Members addresses", memberAddresses);
     } catch (error) {
@@ -141,7 +141,7 @@ useEffect(() => {
   };
   //callinf the funciton
   getAllAddresses();
-}, [ClaimedNFT, editionDrop?.history]);
+}, [ClaimedNFT, NFTDrop?.history]);
 
 //setting the memberslist from above to their addresses
 const memberList = useMemo(() => {

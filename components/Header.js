@@ -27,7 +27,6 @@ const Header = () => {
     //this is the library to be able to use the button to connect to metamask and then retrieve the address connected
     const address = useAddress();
     const connectWithMetamask = useMetamask();
-
     return (
 
         <div className={styles.container}>
@@ -63,6 +62,7 @@ const Header = () => {
                     <div className={styles.connect}>
                         {/* button ready to click and if so calls the function connectWithMetamask 
                         to connect their wallet*/}
+                        
                         <button className={styles.button} onClick={connectWithMetamask}>
                             connectWallet
                         </button>

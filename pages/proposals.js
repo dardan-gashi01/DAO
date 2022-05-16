@@ -36,10 +36,10 @@ const proposals = () => {
     if (!address) { 
       return;
     }
-    const checkBalance = async () => {
+    const ifMember = async () => {
       try{
-        const balance = await NFTDrop.balanceOf(address, 0);
-        if(balance.gt(0)){
+        let owned = await NFTDrop.balanceOf(address, 0);
+        if(owned.gt(0)){
           setClaimedNFT(true);
         }else {
           setClaimedNFT(false);
@@ -48,7 +48,7 @@ const proposals = () => {
         console.error(err);
       }
     };
-    checkBalance();
+    ifMember();
   },[address,NFTDrop]);
 
 
@@ -123,93 +123,82 @@ const proposals = () => {
             
             {/* this is the form that the user will vote with https://docs.thirdweb.com/typescript/sdk.vote*/}
             <form class=''
-              onSubmit={async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+              onSubmit={async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
 
                 //before we do async things, we want to disable the button to prevent double clicks
                 setIsVoting(true);
                 
-                // lets get the votes from the form for the values
+                // This is where we can vote. This section calls the voting of the application
+                // Here we get all of our proposals by mapping through the key of proposals
+                //the main reason we do this is to get the ProposalsID as this is needed to be able to vote on proposals
+                //https://portal.thirdweb.com/typescript/sdk.Vote.vote in the documentation it states the first 
+                //parameter is ProposalID as shown in the link above and the second one is the vote.type
+                //therefore we had to extract this from the proposals section of our form
                 const votes = proposals.map((proposal) => {
-                  const voteResult = {
+                  //here we are setting the default vote as abstain if they do not check anything for the proposalsID we are mapping
+                  const outcome = {
                     proposalId: proposal.proposalId,
                     //abstain by default
                     vote: 2,
                   };
+                  //looping through the votes we selected and storing them as the element so we can call it when we 
+                  //execute vote.vote(ProposalID, vote.type)
                   proposal.votes.forEach((vote) => {
                     const elemement = document.getElementById(
                       proposal.proposalId + "-" + vote.type
-                      
                     );
-                    
-
+                    //this is taking what we have voted for so if the specific element has been selected 
+                    //either for, against or abstain and making sure its been selected
                     if (elemement.checked) {
-                      voteResult.vote = vote.type;
+                      //setting the .type so we can use as our second parameter in the code below
+                      outcome.vote = vote.type;
                       return;
                     }
                   });
-                  return voteResult;
+                  return outcome;
                 });
 
                 // first we need to make sure the user delegates their token to vote
                 try {
                   //we'll check if the wallet still needs to delegate their tokens before they can vote
-                  const delegateTokens = await token.getDelegationOf(address);
-                  // if the delegation is the 0x0 address that means they have not delegated their governance tokens yet
-                  if (delegateTokens === AddressZero) {
+                  let delegatedTokens = await token.getDelegationOf(address);
+                  // if the delegation is the 0x0 address that means they have not delegated their tokens yet
+                  if (delegatedTokens === AddressZero) {
                     //if they haven't delegated their tokens yet, we'll have them delegate them before voting
+                    //this calls metamask to delegate
                     await token.delegateTo(address);
                   }
-                  // then we need to vote on the proposals
+                  // then we need to vote on or execute the previous proposals if needed
                   try {
-                    await Promise.all(
                       votes.map(async ({ proposalId, vote: _vote }) => {
                         // before voting we first need to check whether the proposal is open for voting
                         // we first need to get the latest state of the proposal
-                        const proposal = await vote.get(proposalId);
+                        let proposal = await vote.get(proposalId);
                         // then we check if the proposal is open for voting (state === 1 means it is open)
                         if (proposal.state === 1) {
                           // if it is open for voting, we'll vote on it
+                          //https://portal.thirdweb.com/typescript/sdk.Vote.vote
                           return vote.vote(proposalId, _vote);
                         }
-                        // if the proposal is not open for voting we just return nothing, letting us continue
-                        return;
                       })
-                    );
-                    try {
-                      // if any of the propsals are ready to be executed we'll need to execute them
-                      // a proposal is ready to be executed if it is in state 4
-                      await Promise.all(
-                        votes.map(async ({ proposalId }) => {
-                          // we'll first get the latest state of the proposal again, since we may have just voted before
-                          const proposal = await vote.get(proposalId);
-
-                          //if the state is in state 4 (meaning that it is ready to be executed), we'll execute the proposal
-                          if (proposal.state === 4) {
-                            return vote.execute(proposalId);
-                          }
-                        })
-                      );
-                      // if we get here that means we successfully voted, so let's set the "hasVoted" state to true
-                      setHasVoted(true);
-                      // and log out a success message
-                    } catch (err) {
-                      console.error("failed to execute votes", err);
-                    }
-                  } catch (err) {
-                    console.error("failed to vote", err);
+                    //we set our status to has voted so we know the user has in fact voted already so they cant anymore
+                    setHasVoted(true);
+                  } catch (error) {
+                    console.log(error);
                   }
-                } catch (err) {
-                  console.error("failed to delegate tokens");
+                } catch (error) {
+                  console.log(error);
                 } finally {
-                  // in *either* case we need to set the isVoting state to false to enable the button again
+                  // in either case we need to set the isVoting state to false to enable the button again
                   setIsVoting(false);
                 }
               }}
             >
-              {/* showing the proposals on the page with HTML and CSS*/}
+              {/* displaying the proposals on the page with HTML and CSS*/}
               {proposals.map((proposal) => (
+                //the description of the proposal
                 <div key={proposal.proposalId} class='bg-[#107896] p-4 rounded-lg text-white my-2 max-w-2xl'>
                   {/* showing the description of the proposals*/}
                   <h5>{proposal.description}</h5>
@@ -224,8 +213,6 @@ const proposals = () => {
                           id={proposal.proposalId + "-" + type}
                           name={proposal.proposalId}
                           value={type}
-                          //default the "abstain" vote to checked
-                          defaultChecked={type === 2}
                         />
                         <label htmlFor={proposal.proposalId + "-" + type}>
                           {label}
@@ -237,7 +224,8 @@ const proposals = () => {
               ))}
               {/* creating the button to submit the votes and it wont let us vote again if we have already*/}
               <button className={styles.button} disabled={isVoting || hasVoted} type="submit">
-                {isVoting ? "Voting on the proposal" : hasVoted ? "Voted" : "Submit Votes"}
+              {isVoting && "Voting"}
+              { hasVoted ? 'Voted' : 'Submit Votes'}
               </button>
             </form>
             
@@ -248,7 +236,7 @@ const proposals = () => {
         /* this is for non members*/
         <div className={styles.notClaimed}>
           <Header />
-          you dont own the NFT to access this page
+          To Access the Chat page you need to be part of CityDAO by either minting the NFT or purchasing from secondary market
         </div>
       )}
     </div>
@@ -257,3 +245,6 @@ const proposals = () => {
 
 export default proposals
 
+
+
+     

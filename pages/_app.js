@@ -6,8 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '../styles/globals.css'
 
-//making the chain ID rinkeby to be on the testnet if it was another chain we would change 
-//for example ropsten or mainnet
+//making the chain ID rinkeby to be on the testnet if it was another chain we would change it
 const activeChainId = ChainId.Rinkeby;
 
 //importing our thirdweb components and pages

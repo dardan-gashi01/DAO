@@ -6,7 +6,7 @@ const token = sdk.getToken('0x6f9177d6937e619ECB05E5199b09F7840De19765');
 // adapted once again from with small changes made to parameters https://portal.thirdweb.com/guides/build-treasury-and-governance-for-your-dao
 (async () => {
     try{
-        const description = 'This is the test 2 proposal for the video';
+        const description = 'random proposal for some more final checks';
         
         await vote.propose(description);
 
@@ -30,45 +30,33 @@ const token = sdk.getToken('0x6f9177d6937e619ECB05E5199b09F7840De19765');
       }
   
       // Loop through the array of addresses that hold the NFT
-      const airdropTargets = walletAddresses.map((address) => {
+      const recipients = walletAddresses.map((address) => {
         // setting airdrop amount to 5000 tokens to each holder of the NFT
         const Amount = 5;
         console.log('airdropping 5 to', address);
   
         // making the airdrop target which is the address and the amount they receive
-        const airdropTarget = {
-          toAddress: address,
-          amount: Amount,
+        //for creating the airdrop method we used the function transferbatch and used the key as shown below
+        //to guide us to this code we used the documentation for transferring tokens to a group of people at once
+        //https://portal.thirdweb.com/typescript/sdk.Erc20.transferBatch
+        const recipient = { 
+          toAddress: address, 
+          amount: Amount, 
         };
   
-        return airdropTarget;
+        return recipient;
       });
   
       // Call transferBatch on all our airdrop targets.
       console.log("beginning airdrop...");
       //this moves the tokens to them
-      await token.transferBatch(airdropTargets);
+      await token.transferBatch(recipients);
       console.log("airdrop complete");
-    } catch (err) {
-      console.error("Failed to airdrop tokens", err);
+    } catch (error) {
+      console.log(error);
     }
 })();
 
 
 
-/*proposals to mint extra tokens into our treasury
-const amount = 1_000;
-const description = 'should we mint an extra 1000 tokens to the treasury?';
-//execution function so we execute the mintTo function to mint 1000 tokens
-const executions = [
-  toAddress: token.getAddress();
-  nativeTokenValue: 0;
-  transactionData: token.encoder.encode(
-    'mintTo', [
-      vote.getAddress(),
-      ethers.utils.parseUnits(amount.toString(), 18),
-    ]
-  )
-];
-await vote.propose(description, executions);
-*/
+

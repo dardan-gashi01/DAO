@@ -26,7 +26,7 @@ const sdk = new ThirdwebSDK(
       console.log("SDK created, address:", address)
     } catch (err) {
       //displaying the error if needed to debug
-      console.error(err);
+      console.log(err);
       process.exit(1);
     }
   })();

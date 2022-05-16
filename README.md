@@ -1,15 +1,13 @@
-# Basic Sample Hardhat Project
+#CITYDAO project ReadMe File
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+To launch this project you need to use one of these commands in the terminal
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
 ```
+npm start
+```
+or
+```
+yarn run dev
+```
+
+##this is to Launch the system to be able to interact with elements on the page read Appendix D on how to setup your metamask wallet to be able to use it for this project

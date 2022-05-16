@@ -36,14 +36,13 @@ const styles = {
 
 export default function Home() {
   //setting our variables and states to use
-  const editionDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
+  const NFTDrop = useEditionDrop('0xd98f7cFB1C6ED3Db81D2ec6e7aE3A9C51844E60B');
 
   const token = useToken('0x6f9177d6937e619ECB05E5199b09F7840De19765');
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   
   const [isClaiming,setIsClaiming] = useState(false);
   const address = useAddress();
-  const [ClaimedNFT, setClaimedNFT] = useState(false);
   const [coins, setCoins] = useState([])
   const [search, setSearch] = useState('')
 
@@ -58,11 +57,10 @@ useEffect(() => {
     return;
   }
 
-  // Just like we did in the 7-airdrop-token.js file! Grab the users who hold our NFT
-  // with tokenId 0.
+  // fetch all holders of the NFT with ID 0
   const getAllAddresses = async () => {
     try {
-      const memberAddresses = await editionDrop.history.getAllClaimerAddresses(0);
+      const memberAddresses = await NFTDrop.history.getAllClaimerAddresses(0);
       setMemberAddresses(memberAddresses);
       console.log("Members addresses", memberAddresses);
     } catch (error) {
@@ -71,7 +69,7 @@ useEffect(() => {
 
   };
   getAllAddresses();
-}, [hasClaimedNFT, editionDrop?.history]);
+}, [hasClaimedNFT, NFTDrop?.history]);
 
 // This useEffect grabs the # of token each member holds.
 useEffect(() => {
@@ -124,10 +122,10 @@ const memberList = useMemo(() => {
     if (!address) { 
       return;
     }
-    const checkBalance = async () => {
+    const ifMember = async () => {
       try{
-        const balance = await editionDrop.balanceOf(address, 0);
-        if(balance.gt(0)){
+        let owned = await NFTDrop.balanceOf(address, 0);
+        if(owned.gt(0)){
           setHasClaimedNFT(true);
         }else {
           setHasClaimedNFT(false);
@@ -136,15 +134,14 @@ const memberList = useMemo(() => {
         console.error(err);
       }
     };
-    checkBalance();
-  },[address,editionDrop]);
+    ifMember();
+  },[address,NFTDrop]);
 
   //mint function for when the button is pressed.
   const mint = async () => {
     try{
       setIsClaiming(true);
-      await editionDrop.claim('0',1);
-      console.log('minted')
+      await NFTDrop.claim('0',1);
       setHasClaimedNFT(true);
     }catch(err){
       setHasClaimedNFT(false);
@@ -257,7 +254,7 @@ const memberList = useMemo(() => {
         metamask*/}
         <div className={styles.button}>
             <button disabled={isClaiming} onClick={mint}>
-              {isClaiming ? 'minting NFT...' : "mint NFT Cost:0.1ETH"}
+              {isClaiming ? 'minting NFT' : "mint NFT Cost:0.1ETH"}
             </button>
         </div>
       </div>
@@ -266,3 +263,5 @@ const memberList = useMemo(() => {
     </div>
   )
 }
+
+
